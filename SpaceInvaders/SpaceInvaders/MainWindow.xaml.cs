@@ -20,9 +20,25 @@ namespace SpaceInvaders
     /// </summary>
     public partial class MainWindow : Window
     {
+        Enemies ene;
+        List<Object> allenemy = new List<Object>();
         public MainWindow()
         {
             InitializeComponent();
+            ene = new Enemies();
+        }
+
+
+        public void SpawnEnemy(Ellipse ene)
+        {
+            for(int i = 0; i <= 10; i++)
+            {
+                Canvas.SetLeft(ene, 0);
+                Canvas.SetTop(ene, 0);
+                square.Children.Add(ene);
+                allenemy.Add(ene);
+            }
+
         }
 
         //Player Control, left to right. + boundaries
@@ -48,5 +64,31 @@ namespace SpaceInvaders
                 Canvas.SetLeft(player, x - 10);
             }
         }
+
+    }
+
+    public class Enemies
+    {
+        public Ellipse enemy;
+        public int hp;
+
+        MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+        public Enemies()
+        {
+            this.enemy = new Ellipse();
+            this.hp = 100;
+            enemy.Width = 35;
+            enemy.Height = 35;
+            enemy.Fill = Brushes.Red;
+            mainWindow.SpawnEnemy(enemy);
+        }
+
+        public int Hp
+        {
+            get { return hp; }
+            set { hp = value; }
+        }
+
+
     }
 }

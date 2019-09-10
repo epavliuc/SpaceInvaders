@@ -8,7 +8,7 @@
         Title="MainWindow" Height="500" Width="700" KeyDown="Window_KeyDown">
     <Grid>
         <Canvas x:Name="square" Height="500" Width="650" Background="LightYellow">
-            <Ellipse x:Name="player" Width="50" Height="50" Fill="Blue" Canvas.Left="300" Canvas.Top="400" />
+            <Ellipse x:Name="player" x:FieldModifier="public" Width="50" Height="50" Fill="Blue" Canvas.Left="300" Canvas.Top="400" />
         </Canvas>
 
     </Grid>

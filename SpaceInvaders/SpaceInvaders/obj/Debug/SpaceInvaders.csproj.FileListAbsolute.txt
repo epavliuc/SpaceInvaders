@@ -13,3 +13,18 @@ C:\Users\Eduard Pavliuc\Engineering40\SpaceInvadersProject\SpaceInvaders\SpaceIn
 C:\Users\Eduard Pavliuc\Engineering40\SpaceInvadersProject\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.csproj.CoreCompileInputs.cache
 C:\Users\Eduard Pavliuc\Engineering40\SpaceInvadersProject\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.exe
 C:\Users\Eduard Pavliuc\Engineering40\SpaceInvadersProject\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.pdb
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.csprojAssemblyReference.cache
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\MainWindow.g.cs
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\App.g.cs
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders_MarkupCompile.cache
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders_MarkupCompile.lref
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\MainWindow.baml
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.g.resources
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.pdb
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\bin\Debug\SpaceInvaders.exe.config
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\bin\Debug\SpaceInvaders.exe
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\bin\Debug\SpaceInvaders.pdb
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.Properties.Resources.resources
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.csproj.GenerateResource.cache
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.csproj.CoreCompileInputs.cache
+C:\Users\edbox\Documents\SpartaGlobal\SpaceInvaders\SpaceInvaders\obj\Debug\SpaceInvaders.exe
