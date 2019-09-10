@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SpaceInvaders
 {
@@ -20,25 +21,52 @@ namespace SpaceInvaders
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer gameTimes = new DispatcherTimer();
         Enemies ene;
-        List<Object> allenemy = new List<Object>();
+        List<Ellipse> allenemy = new List<Ellipse>();
         public MainWindow()
         {
             InitializeComponent();
-            ene = new Enemies();
+            Timer();
+            RepeatSpawn();
         }
 
-
-        public void SpawnEnemy(Ellipse ene)
+        public void Timer()
         {
-            for(int i = 0; i <= 10; i++)
+            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,700);
+            gameTimes.Tick += AnimationTick;
+            gameTimes.Start();
+        }
+
+        private void AnimationTick(object sender, EventArgs e)
+        {
+            Animation(allenemy);
+        }
+
+        public void RepeatSpawn()
+        {
+            MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+            for (int i = 0; i <= 500; i+=50)
             {
-                Canvas.SetLeft(ene, 0);
+                ene = new Enemies();
+                mainWindow.SpawnEnemy(ene.Enemy,i);
+            }
+        }
+        public void SpawnEnemy(Ellipse ene,int lft)
+        {
+            
+                Canvas.SetLeft(ene, lft);
                 Canvas.SetTop(ene, 0);
                 square.Children.Add(ene);
                 allenemy.Add(ene);
+        }
+        public void Animation(List<Ellipse> enemyList)
+        {
+            foreach(Ellipse oj in enemyList)
+            {
+                double currentLeft = Canvas.GetLeft(oj);
+                Canvas.SetLeft(oj, currentLeft += 10);
             }
-
         }
 
         //Player Control, left to right. + boundaries
@@ -72,7 +100,7 @@ namespace SpaceInvaders
         public Ellipse enemy;
         public int hp;
 
-        MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+        
         public Enemies()
         {
             this.enemy = new Ellipse();
@@ -80,7 +108,7 @@ namespace SpaceInvaders
             enemy.Width = 35;
             enemy.Height = 35;
             enemy.Fill = Brushes.Red;
-            mainWindow.SpawnEnemy(enemy);
+            //mainWindow.SpawnEnemy(enemy);
         }
 
         public int Hp
@@ -89,6 +117,10 @@ namespace SpaceInvaders
             set { hp = value; }
         }
 
+        public Ellipse Enemy
+        {
+            get { return this.enemy; }
+        }
 
     }
 }
