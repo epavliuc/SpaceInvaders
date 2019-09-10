@@ -23,7 +23,7 @@ namespace SpaceInvaders
     {
         DispatcherTimer gameTimes = new DispatcherTimer();
         Enemies ene;
-        List<Ellipse> allenemy = new List<Ellipse>();
+        List<Enemies> allenemy = new List<Enemies>();
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace SpaceInvaders
 
         public void Timer()
         {
-            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,700);
+            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,400);
             gameTimes.Tick += AnimationTick;
             gameTimes.Start();
         }
@@ -46,26 +46,43 @@ namespace SpaceInvaders
         public void RepeatSpawn()
         {
             MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-            for (int i = 0; i <= 500; i+=50)
+            for (int i = 50; i <= 600; i+=50)
             {
                 ene = new Enemies();
-                mainWindow.SpawnEnemy(ene.Enemy,i);
+                mainWindow.SpawnEnemy(ene,i);
             }
         }
-        public void SpawnEnemy(Ellipse ene,int lft)
+        public void SpawnEnemy(Enemies ene,int lft)
         {
             
-                Canvas.SetLeft(ene, lft);
-                Canvas.SetTop(ene, 0);
-                square.Children.Add(ene);
+                Canvas.SetLeft(ene.Enemy, lft);
+                Canvas.SetTop(ene.Enemy, 0);
+                square.Children.Add(ene.Enemy);
                 allenemy.Add(ene);
         }
-        public void Animation(List<Ellipse> enemyList)
+        public void Animation(List<Enemies> enemyList)
         {
-            foreach(Ellipse oj in enemyList)
+            
+            foreach(Enemies oj in enemyList)
             {
-                double currentLeft = Canvas.GetLeft(oj);
-                Canvas.SetLeft(oj, currentLeft += 10);
+                Ellipse enyShape = oj.Enemy;
+                double currentLeft = Canvas.GetLeft(enyShape);
+                double currentTop = Canvas.GetTop(enyShape);
+
+                if (oj.Direction == true)
+                {
+                    Canvas.SetLeft(enyShape, currentLeft += 10);
+                }
+                else
+                {
+                    Canvas.SetLeft(enyShape, currentLeft -= 10);
+                }
+                
+                if(currentLeft == square.ActualWidth+10| currentLeft == 10)
+                {
+                    Canvas.SetTop(enyShape, currentTop += 50);
+                    oj.Direction = !oj.Direction;
+                }
             }
         }
 
@@ -99,7 +116,7 @@ namespace SpaceInvaders
     {
         public Ellipse enemy;
         public int hp;
-
+        public bool direction;
         
         public Enemies()
         {
@@ -108,6 +125,7 @@ namespace SpaceInvaders
             enemy.Width = 35;
             enemy.Height = 35;
             enemy.Fill = Brushes.Red;
+            direction = true; 
             //mainWindow.SpawnEnemy(enemy);
         }
 
@@ -119,8 +137,16 @@ namespace SpaceInvaders
 
         public Ellipse Enemy
         {
-            get { return this.enemy; }
+            get { return enemy; }
         }
+
+        public bool Direction
+        {
+            get { return direction; }
+            set { direction = value; }
+        }
+
+
 
     }
 }
