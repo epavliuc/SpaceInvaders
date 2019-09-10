@@ -33,7 +33,7 @@ namespace SpaceInvaders
 
         public void Timer()
         {
-            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,400);
+            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,10);
             gameTimes.Tick += AnimationTick;
             gameTimes.Start();
         }
@@ -46,7 +46,7 @@ namespace SpaceInvaders
         public void RepeatSpawn()
         {
             MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-            for (int i = 50; i <= 600; i+=50)
+            for (int i = 0; i <= 600; i+=35)
             {
                 ene = new Enemies();
                 mainWindow.SpawnEnemy(ene,i);
@@ -71,18 +71,19 @@ namespace SpaceInvaders
 
                 if (oj.Direction == true)
                 {
-                    Canvas.SetLeft(enyShape, currentLeft += 10);
+                    Canvas.SetLeft(enyShape, currentLeft += 1);
                 }
                 else
                 {
-                    Canvas.SetLeft(enyShape, currentLeft -= 10);
+                    Canvas.SetLeft(enyShape, currentLeft -= 1);
                 }
                 
-                if(currentLeft == square.ActualWidth+10| currentLeft == 10)
+                if(currentLeft == square.ActualWidth | currentLeft == -50)
                 {
                     Canvas.SetTop(enyShape, currentTop += 50);
                     oj.Direction = !oj.Direction;
                 }
+
             }
         }
 
@@ -90,6 +91,7 @@ namespace SpaceInvaders
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {          
             double x = Canvas.GetLeft(player);
+            //move player from side to side
             if (x > 0 & x < 600)
             {
                 if (e.Key == Key.Left)
@@ -108,9 +110,17 @@ namespace SpaceInvaders
             {
                 Canvas.SetLeft(player, x - 10);
             }
+
+            //spawn bullet on spacebar press
+            if(e.Key == Key.Space)
+            {
+                Console.Beep();
+            }
+            
         }
 
     }
+
 
     public class Enemies
     {
@@ -122,8 +132,8 @@ namespace SpaceInvaders
         {
             this.enemy = new Ellipse();
             this.hp = 100;
-            enemy.Width = 35;
-            enemy.Height = 35;
+            enemy.Width = 30;
+            enemy.Height = 30;
             enemy.Fill = Brushes.Red;
             direction = true; 
             //mainWindow.SpawnEnemy(enemy);
@@ -146,7 +156,21 @@ namespace SpaceInvaders
             set { direction = value; }
         }
 
+    }
 
+    public class Bullet
+    {
+        Ellipse bullet = new Ellipse();
+        int speed = 100;
+        int dmg = 50;
+
+        
+
+        public Ellipse Bullets
+        {
+            get { return bullet; }
+            //set { bullet = value; }
+        }
 
     }
 }
