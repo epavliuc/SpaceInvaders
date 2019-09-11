@@ -50,5 +50,6 @@ What was achieved:
 ```
 ### Issues throughout the project
 ```
-Unfortunatly I was unable to work on the project for the given timeframe, on 09/09/2019 I was not available to do so. Due to this, I failed to implement all desired features.
+-Unfortunatly I was unable to work on the project for the given timeframe, on 09/09/2019 I was not available to do so. Due to this, I failed to implement all desired features.
+-Another issue throughout development was managing the amount of enemies, there were issues with them being spaced evenly on the board and on the right level. When the numbers of enemies would increase they were frequently overlapping and that was not a desireable result.
 ```
