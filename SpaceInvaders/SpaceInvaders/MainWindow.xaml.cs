@@ -25,6 +25,7 @@ namespace SpaceInvaders
         Enemies ene;
         Bullet bul;
         List<Enemies> allenemy = new List<Enemies>();
+        List<Bullet> allbullets = new List<Bullet>();
 
         //main
         public MainWindow()
@@ -46,8 +47,9 @@ namespace SpaceInvaders
         private void AnimationTick(object sender, EventArgs e)
         {
             Animation(allenemy);
-            
+            AnimateBulet(allbullets);
         }
+
 
         //Control how many enemies spawn.
         public void RepeatSpawn()
@@ -60,22 +62,38 @@ namespace SpaceInvaders
             }
         }
 
-        //Spawn enemies and add them to a list.
-        public void SpawnEnemy(Enemies ene,int lft)
-        {           
-                Canvas.SetLeft(ene.Enemy, lft);
-                Canvas.SetTop(ene.Enemy, 0);
-                square.Children.Add(ene.Enemy);
-                allenemy.Add(ene);
-        }
-        public void SpawnBullet(Bullet bul)
+
+        public List<Bullet> SpawnBullet(Bullet bul)
         {
-            Canvas.SetLeft(bul.Bullets, 0);
-            Canvas.SetTop(bul.Bullets, 0);
+            Canvas.SetLeft(bul.Bullets, (Canvas.GetLeft(player)+22.5));
+            Canvas.SetTop(bul.Bullets, (Canvas.GetTop(player)));
             square.Children.Add(bul.Bullets);
-            //allenemy.Add(ene);
+            allbullets.Add(bul);
+
+            return allbullets;
+        }
+        public void AnimateBulet(List<Bullet> bullList)
+        {
+
+            foreach (Bullet b in bullList)
+            {
+                double currentTop = Canvas.GetTop(b.Bullets);
+                Ellipse bulletShape = b.Bullets;
+                if (b.Hit == false)
+                {
+                    Canvas.SetTop(bulletShape, currentTop -= 10);
+                }
+            }
         }
 
+        //Spawn enemies and add them to a list.
+        public void SpawnEnemy(Enemies ene, int lft)
+        {
+            Canvas.SetLeft(ene.Enemy, lft);
+            Canvas.SetTop(ene.Enemy, 0);
+            square.Children.Add(ene.Enemy);
+            allenemy.Add(ene);
+        }
         //Animation for each enemy from the list.
         public void Animation(List<Enemies> enemyList)
         {           
@@ -102,19 +120,7 @@ namespace SpaceInvaders
             }
         }
 
-        public void AnimateBulet(Bullet bull)
-        {
-            double currentLeft = Canvas.GetLeft(player);
-            double currentTop = Canvas.GetTop(player);
-            Ellipse bulletShape = bull.Bullets;
 
-            if(bull.Hit == false)
-            {
-                Canvas.SetLeft(bulletShape, currentLeft+22.5);
-                Canvas.SetTop(bulletShape, currentTop += 1);
-            }
-            
-        }
 
         //Player Control, left to right. + boundaries
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -141,12 +147,12 @@ namespace SpaceInvaders
             }
 
             //spawn bullet on spacebar press
-            if(e.Key == Key.Space)
+            if (e.Key == Key.Space)
             {
                 bul = new Bullet();
-                SpawnBullet(bul);
-                AnimateBulet(bul);
-            }           
+                //SpawnBullet(bul);
+                AnimateBulet(SpawnBullet(bul));
+            }
         }
     }
 
@@ -186,13 +192,14 @@ namespace SpaceInvaders
 
     public class Bullet
     {
-        Ellipse bullet = new Ellipse();
+        Ellipse bullet;
         int speed;
         int dmg;
         bool hit;
 
         public Bullet()
         {
+            bullet = new Ellipse();
             speed = 100;
             dmg = 50;
             bullet.Width = 5;
@@ -200,7 +207,7 @@ namespace SpaceInvaders
             bullet.Fill = Brushes.Black;
             hit = false;
         }
-      
+
         public Ellipse Bullets
         {
             get { return bullet; }
