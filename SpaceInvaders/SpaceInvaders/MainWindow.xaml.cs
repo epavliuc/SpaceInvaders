@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Drawing;
 
 namespace SpaceInvaders
 {
@@ -33,14 +34,16 @@ namespace SpaceInvaders
             InitializeComponent();
             Timer();
             RepeatSpawn();
+
         }
 
         //Timer to run specified methods
         public void Timer()
         {
-            gameTimes.Interval = new TimeSpan(0, 0, 0, 0,10);
+            gameTimes.Interval = new TimeSpan(0, 0, 0, 0, 10);
             gameTimes.Tick += AnimationTick;
             gameTimes.Start();
+
         }
 
         //Method used by timer.
@@ -48,24 +51,53 @@ namespace SpaceInvaders
         {
             Animation(allenemy);
             AnimateBulet(allbullets);
+            CollisionDetection(allenemy, allbullets);
         }
 
-
-        //Control how many enemies spawn.
-        public void RepeatSpawn()
+        public void CollisionDetection(List<Enemies> allenemy, List<Bullet> allbullets)
         {
-            MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-            for (int i = 0; i <= 600; i+=35)
+            foreach (Enemies e in allenemy)
             {
-                ene = new Enemies();
-                mainWindow.SpawnEnemy(ene,i);
+                Ellipse enemy = e.Enemy;
+                double top = Canvas.GetTop(enemy);
+                double left = Canvas.GetLeft(enemy);
+                ASDF:;
+                try
+                {
+                    foreach (Bullet b in allbullets)
+                    {
+                        Ellipse bullet = b.Bullets;
+                        double topB = Canvas.GetTop(bullet);
+                        double leftB = Canvas.GetLeft(bullet);
+                        try
+                        {
+                            if ((topB == top) && (leftB >= (left) && leftB <= (left + 30)))
+                            {
+                                e.Hp = e.Hp - b.Dmg;
+                                square.Children.Remove(bullet);
+                                allbullets.Remove(b);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    goto ASDF;
+                }
+
+                }
             }
-        }
+        
+
 
 
         public List<Bullet> SpawnBullet(Bullet bul)
         {
-            Canvas.SetLeft(bul.Bullets, (Canvas.GetLeft(player)+22.5));
+            Canvas.SetLeft(bul.Bullets, (Canvas.GetLeft(player) + 22.5));
             Canvas.SetTop(bul.Bullets, (Canvas.GetTop(player)));
             square.Children.Add(bul.Bullets);
             allbullets.Add(bul);
@@ -74,57 +106,105 @@ namespace SpaceInvaders
         }
         public void AnimateBulet(List<Bullet> bullList)
         {
-
             foreach (Bullet b in bullList)
             {
                 double currentTop = Canvas.GetTop(b.Bullets);
+
                 Ellipse bulletShape = b.Bullets;
+
                 if (b.Hit == false)
                 {
                     Canvas.SetTop(bulletShape, currentTop -= 10);
                 }
+
             }
         }
 
+
+
         //Spawn enemies and add them to a list.
-        public void SpawnEnemy(Enemies ene, int lft)
+        public void SpawnEnemy(Enemies ene, int lft, int top)
         {
+
             Canvas.SetLeft(ene.Enemy, lft);
-            Canvas.SetTop(ene.Enemy, 0);
+            Canvas.SetTop(ene.Enemy, top);
             square.Children.Add(ene.Enemy);
             allenemy.Add(ene);
         }
+
+        Random rnd = new Random();
+        //Control how many enemies spawn.
+        public void RepeatSpawn()
+        {
+            MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
+            for (int i = 0; i <= 1000; i += 35)
+            {
+                ene = new Enemies();
+
+                int rndNr = rnd.Next(0, 100);
+                int topValue;
+                if (rndNr >= 66)
+                {
+                    topValue = 100;
+
+                }
+                else if (rndNr >= 33)
+                {
+                    topValue = 50;
+                    ene.Direction = false;
+                }
+                else
+                {
+                    topValue = 0;
+                }
+                int leftValue = i;
+                mainWindow.SpawnEnemy(ene, leftValue, topValue);
+            }
+        }
+
         //Animation for each enemy from the list.
         public void Animation(List<Enemies> enemyList)
-        {           
-            foreach(Enemies oj in enemyList)
+        {
+            foreach (Enemies oj in enemyList)
             {
+
                 Ellipse enyShape = oj.Enemy;
                 double currentLeft = Canvas.GetLeft(enyShape);
                 double currentTop = Canvas.GetTop(enyShape);
 
-                if (oj.Direction == true)
+                if (oj.Hp > 0)
                 {
-                    Canvas.SetLeft(enyShape, currentLeft += 1);
+                    if (oj.Direction == true)
+                    {
+                        Canvas.SetLeft(enyShape, currentLeft += 1);
+                    }
+                    else
+                    {
+                        Canvas.SetLeft(enyShape, currentLeft -= 1);
+                    }
+
+                    if (currentLeft >= square.ActualWidth | currentLeft == -50)
+                    {
+                        Canvas.SetTop(enyShape, currentTop += 50);
+                        oj.Direction = !oj.Direction;
+                    }
                 }
                 else
                 {
-                    Canvas.SetLeft(enyShape, currentLeft -= 1);
+                    square.Children.Remove(enyShape);
                 }
-                
-                if(currentLeft == square.ActualWidth | currentLeft == -50)
+
+                if (oj.Hp == 50)
                 {
-                    Canvas.SetTop(enyShape, currentTop += 50);
-                    oj.Direction = !oj.Direction;
+                    enyShape.Fill = Brushes.Yellow;
                 }
+               
             }
         }
-
-
-
+        public bool keypress = false;
         //Player Control, left to right. + boundaries
         private void Window_KeyDown(object sender, KeyEventArgs e)
-        {          
+        {
             double x = Canvas.GetLeft(player);
             //move player from side to side
             if (x > 0 & x < 600)
@@ -137,7 +217,8 @@ namespace SpaceInvaders
                 {
                     Canvas.SetLeft(player, x += 10);
                 }
-            }else if (x <= 0)
+            }
+            else if (x <= 0)
             {
                 Canvas.SetLeft(player, x + 10);
             }
@@ -146,12 +227,23 @@ namespace SpaceInvaders
                 Canvas.SetLeft(player, x - 10);
             }
 
-            //spawn bullet on spacebar press
+            //spawn bullet on spacebar press.
+            if(keypress == false)
+            {
+                if (e.Key == Key.Space)
+                {
+                    bul = new Bullet();
+                    AnimateBulet(SpawnBullet(bul));
+                    keypress = true;
+                }
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
             if (e.Key == Key.Space)
             {
-                bul = new Bullet();
-                //SpawnBullet(bul);
-                AnimateBulet(SpawnBullet(bul));
+                keypress = false;
             }
         }
     }
@@ -161,7 +253,7 @@ namespace SpaceInvaders
         public Ellipse enemy;
         public int hp;
         public bool direction;
-        
+
         public Enemies()
         {
             this.enemy = new Ellipse();
@@ -169,7 +261,7 @@ namespace SpaceInvaders
             enemy.Width = 30;
             enemy.Height = 30;
             enemy.Fill = Brushes.Red;
-            direction = true; 
+            direction = true;
         }
 
         public int Hp
@@ -193,14 +285,12 @@ namespace SpaceInvaders
     public class Bullet
     {
         Ellipse bullet;
-        int speed;
         int dmg;
         bool hit;
 
         public Bullet()
         {
             bullet = new Ellipse();
-            speed = 100;
             dmg = 50;
             bullet.Width = 5;
             bullet.Height = 15;
@@ -211,6 +301,12 @@ namespace SpaceInvaders
         public Ellipse Bullets
         {
             get { return bullet; }
+            //set { bullet = value; }
+        }
+
+        public int Dmg
+        {
+            get { return dmg; }
             //set { bullet = value; }
         }
 
