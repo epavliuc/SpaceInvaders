@@ -48,4 +48,7 @@ What was achieved:
 ```
 -Due to time constrains as I was not able to implement a menu from which the user can start a new game.
 ```
-
+### Issues throughout the project
+```
+Unfortunatly I was unable to work on the project for the given timeframe, on 09/09/2019 I was not available to do so. Due to this, I failed to implement all desired features.
+```
