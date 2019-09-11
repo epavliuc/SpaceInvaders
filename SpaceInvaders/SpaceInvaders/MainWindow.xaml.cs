@@ -23,7 +23,10 @@ namespace SpaceInvaders
     {
         DispatcherTimer gameTimes = new DispatcherTimer();
         Enemies ene;
+        Bullet bul;
         List<Enemies> allenemy = new List<Enemies>();
+
+        //main
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +34,7 @@ namespace SpaceInvaders
             RepeatSpawn();
         }
 
+        //Timer to run specified methods
         public void Timer()
         {
             gameTimes.Interval = new TimeSpan(0, 0, 0, 0,10);
@@ -38,11 +42,14 @@ namespace SpaceInvaders
             gameTimes.Start();
         }
 
+        //Method used by timer.
         private void AnimationTick(object sender, EventArgs e)
         {
             Animation(allenemy);
+            
         }
 
+        //Control how many enemies spawn.
         public void RepeatSpawn()
         {
             MainWindow mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
@@ -52,17 +59,26 @@ namespace SpaceInvaders
                 mainWindow.SpawnEnemy(ene,i);
             }
         }
+
+        //Spawn enemies and add them to a list.
         public void SpawnEnemy(Enemies ene,int lft)
-        {
-            
+        {           
                 Canvas.SetLeft(ene.Enemy, lft);
                 Canvas.SetTop(ene.Enemy, 0);
                 square.Children.Add(ene.Enemy);
                 allenemy.Add(ene);
         }
-        public void Animation(List<Enemies> enemyList)
+        public void SpawnBullet(Bullet bul)
         {
-            
+            Canvas.SetLeft(bul.Bullets, 0);
+            Canvas.SetTop(bul.Bullets, 0);
+            square.Children.Add(bul.Bullets);
+            //allenemy.Add(ene);
+        }
+
+        //Animation for each enemy from the list.
+        public void Animation(List<Enemies> enemyList)
+        {           
             foreach(Enemies oj in enemyList)
             {
                 Ellipse enyShape = oj.Enemy;
@@ -83,8 +99,21 @@ namespace SpaceInvaders
                     Canvas.SetTop(enyShape, currentTop += 50);
                     oj.Direction = !oj.Direction;
                 }
-
             }
+        }
+
+        public void AnimateBulet(Bullet bull)
+        {
+            double currentLeft = Canvas.GetLeft(player);
+            double currentTop = Canvas.GetTop(player);
+            Ellipse bulletShape = bull.Bullets;
+
+            if(bull.Hit == false)
+            {
+                Canvas.SetLeft(bulletShape, currentLeft+22.5);
+                Canvas.SetTop(bulletShape, currentTop += 1);
+            }
+            
         }
 
         //Player Control, left to right. + boundaries
@@ -114,13 +143,12 @@ namespace SpaceInvaders
             //spawn bullet on spacebar press
             if(e.Key == Key.Space)
             {
-                Console.Beep();
-            }
-            
+                bul = new Bullet();
+                SpawnBullet(bul);
+                AnimateBulet(bul);
+            }           
         }
-
     }
-
 
     public class Enemies
     {
@@ -136,7 +164,6 @@ namespace SpaceInvaders
             enemy.Height = 30;
             enemy.Fill = Brushes.Red;
             direction = true; 
-            //mainWindow.SpawnEnemy(enemy);
         }
 
         public int Hp
@@ -155,21 +182,35 @@ namespace SpaceInvaders
             get { return direction; }
             set { direction = value; }
         }
-
     }
 
     public class Bullet
     {
         Ellipse bullet = new Ellipse();
-        int speed = 100;
-        int dmg = 50;
+        int speed;
+        int dmg;
+        bool hit;
 
-        
-
+        public Bullet()
+        {
+            speed = 100;
+            dmg = 50;
+            bullet.Width = 5;
+            bullet.Height = 15;
+            bullet.Fill = Brushes.Black;
+            hit = false;
+        }
+      
         public Ellipse Bullets
         {
             get { return bullet; }
             //set { bullet = value; }
+        }
+
+        public bool Hit
+        {
+            get { return hit; }
+            set { hit = value; }
         }
 
     }
